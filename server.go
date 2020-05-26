@@ -495,7 +495,7 @@ func Serve(opts *ServeConfig) {
 }
 
 func serverListener() (net.Listener, error) {
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == "windows" || os.Getenv("PLUGIN_HOST") != "" {
 		return serverListener_tcp()
 	}
 
@@ -534,7 +534,7 @@ func serverListener_tcp() (net.Listener, error) {
 	}
 
 	for port := minPort; port <= maxPort; port++ {
-		address := fmt.Sprintf("127.0.0.1:%d", port)
+		address := fmt.Sprintf("0.0.0.0:%d", port)
 		listener, err := net.Listen("tcp", address)
 		if err == nil {
 			return listener, nil
